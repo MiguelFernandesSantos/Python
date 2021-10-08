@@ -16,6 +16,9 @@ def CalculaTudo (Numeros =[], Pesos =[]):
 	Tudo[2] = PrimeiroQuartil(Numeros)
 	Tudo[3] = SegundoQuartil(Numeros)
 	Tudo[4] = TerceiroQuartil(Numeros)
+	Tudo[5] = Amplitude(Numeros)
+	Tudo[6] = VarianciaSimples(Numeros)
+	Tudo[7] = VarianciaQuadrada(Numeros)
 
 	return Tudo
 
@@ -54,11 +57,8 @@ def MediaPonderada(numeros = [], pesos = []):
 def PrimeiroQuartil (numeros = []):
 
 	numeros.sort()
-
 	quantidade = len(numeros)
-
 	numeroExato =  quantidade / 4
-
 	min = round(numeroExato, 0)
 	max = 0
 
@@ -76,14 +76,11 @@ def PrimeiroQuartil (numeros = []):
 # FUNÇÃO PARA ENCONTRAR O SEGUNDO QUARTIL:
 def SegundoQuartil (numeros = []):
 
-
 	quantidade = len(numeros)
 	numeroExato = quantidade / 2
 	indice = 0
-
 	min = round(numeroExato, 0)
 	max = 0
-
 	numeros.sort()
 
 	if min > numeroExato:
@@ -101,13 +98,9 @@ def SegundoQuartil (numeros = []):
 def TerceiroQuartil (numeros = []):
 
 	numeros.sort()
-
 	quantidade = len(numeros)
-
 	quantidade =  quantidade  * 3
-
 	numeroExato = quantidade / 4
-
 	min = round(numeroExato, 0)
 	max = 0
 
@@ -122,13 +115,69 @@ def TerceiroQuartil (numeros = []):
 
 	return numeros[numeroExato]
 
+# FUNÇÃO PARA ENCONTRAR A AMPLITUDE:
+def Amplitude (numeros = []):
 
+	menor = min(numeros)
+	maior = max(numeros)	
+	numero = maior - menor
+
+	return numero
+
+# FUNÇÃO PARA ENCONTRAR A VARIANCIA SIMPLES:
+def VarianciaSimples (numeros = []):
+
+	media = MediaSimples(numeros)
+	tamanho = len(numeros)
+	indice = 0
+	valor = 0
+	soma = 0
+	variancias = [None for _ in range(13)]
+
+	for item in numeros:
+		valor = item - media
+		variancias[indice] = valor
+		indice += 1
+
+	soma = sum(variancias)
+
+	soma = math.floor(soma)
+
+	return soma
+
+# FUNÇÃO PARA ENCONTRAR A VARIANCIA QUADRADA:
+def VarianciaQuadrada (numeros = []):
+
+	media = MediaSimples(numeros)
+	tamanho = len(numeros) - 1
+	indice = 0
+	valor = 0
+	soma = 0
+	variancias = [None for _ in range(13)]
+	varianciasQuadrada = [None for _ in range(13)]
+
+	for item in numeros:
+		valor = item - media
+		variancias[indice] = valor
+		indice += 1
+
+	indice = 0
+
+	for item in variancias:
+		valor =  item * item
+		varianciasQuadrada[indice] = valor
+		indice += 1
+
+	soma = sum(varianciasQuadrada)
+	soma = soma / tamanho
+	soma = math.sqrt(soma)
+
+	return soma
+
+# INICIO:
 
 Numeros = [ 10, 10, 1, 45, 63, 74, 32, 67, 31, 54, 21, 56, 23]
 Pesos = [1, 2, 3, 5, 6, 1, 8, 1, 2, 4, 2, 6, 3]
-Quantidade = []
-Variancias = []
-VarianciasQuadrada = []
 
 tudo = CalculaTudo(Numeros, Pesos)
 
