@@ -106,7 +106,5 @@ formas = {
 
 tudo = Tudo(formas)
 
-print("Cone: ",tudo["Cone"])
-print("Piramide: ",tudo["Piramide"])
-print("Esfera: ",tudo["Esfera"])
-print("Cilindro: ",tudo["Cilindro"])
+for item in tudo:
+    print("O " + item + " possui um volume de ", tudo[item])
