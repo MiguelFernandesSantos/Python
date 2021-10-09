@@ -239,11 +239,6 @@ GeometriaPlana = {
 
 Calculos = tudo(GeometriaPlana)
 
-print("  A | P")
-print(Calculos["Quadrado"])
-print(Calculos["Triangulo"])
-print(Calculos["Retangulo"])
-print(Calculos["Circulo"])
-print(Calculos["Losango"])
-print(Calculos["Trapezio"])
-print(Calculos["Paralelogramo"])
+for item in Calculos:
+    print("O " + item + " possui uma area de ", Calculos[item][0])
+    print("O " + item + " possui um perimetro de ", Calculos[item][1], "\n")
