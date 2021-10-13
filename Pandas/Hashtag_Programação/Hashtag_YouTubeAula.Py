@@ -1,3 +1,13 @@
+#########################################################
+#                                                       #
+#    NOME: MIGUEL FERNANDES SANTOS.                     #
+#    DATA: 13/10/2021                                   #
+#    PROJETO: AULA SOBRE CIENCIA DE DADOS DA            # 
+#    HASHTAG.                                           #
+#    SITE: https://www.youtube.com/watch?v=C0aj3FjN5e0  #
+#                                                       #
+#########################################################
+
 # Importa o pandas:
 import pandas as pd 
 
