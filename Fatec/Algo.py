@@ -11,6 +11,7 @@
 
 import math
 
+
 # ##############PROCEDIMENTOS##############
 
 #             1 - MÉDIA ARITMÉTICA SIMPLES
@@ -23,7 +24,7 @@ def mediasimples(valores=()):
         media += item
 
     media = media / qtde_elementos
-    print(f'Média Aritmética Simples = {media} ')
+    print(f'Média Aritmética Simples = {media} \n\n')
     return media
 #####################################################
 
@@ -41,7 +42,7 @@ def mediaponderada(valores=()):
         soma_peso += peso
 
     media_ponderada = valorxpesos / soma_peso
-    print(f'Média Aritmética Ponderada = {media_ponderada}')
+    print(f'\nMédia Aritmética Ponderada = {media_ponderada}\n\n')
 #####################################################
 
 
@@ -57,9 +58,9 @@ def moda(valores=()):
     resultado_moda = [numero for numero in dic.keys() if dic[numero] == max(valor_moda) and max(valor_moda) > 1]
 
     if len(resultado_moda) != 0:
-        print(f' Moda = {resultado_moda}')
+        print(f' Moda = {resultado_moda}\n\n')
     else:
-        print('Amostra Amodal')
+        print('Amostra Amodal\n\n')
 #####################################################
 
 
@@ -69,10 +70,10 @@ def mediana(valores=()):
     print(f'Amostra ordenada = {valores}')
     if qtde_elementos % 2 == 0:
         med = (valores[int((qtde_elementos / 2) - 1)] + valores[int((qtde_elementos / 2))]) / 2
-        print(f'Mediana = {med}')
+        print(f'Mediana = {med}\n\n')
     else:
         med = valores[int((qtde_elementos / 2))]
-        print(f'Mediana = {med}')
+        print(f'Mediana = {med}\n\n')
 #####################################################
 
 
@@ -82,10 +83,10 @@ def primeiroquartil(valores=()):
     print(f'Amostra ordenada = {valores}')
     if qtde_elementos % 4 == 0:
         q1 = (valores[int((qtde_elementos / 4) - 1)] + valores[int((qtde_elementos / 4))]) / 2
-        print(f'Primeiro Quartil = {q1}')
+        print(f'Primeiro Quartil = {q1}\n\n')
     else:
         q1 = valores[int((qtde_elementos / 4))]
-        print(f'Primeiro Quartil = {q1}')
+        print(f'Primeiro Quartil = {q1}\n\n')
 #####################################################
 
 
@@ -95,25 +96,29 @@ def terceiroquartil(valores=()):
     print(f'Amostra ordenada = {valores}')
     if (3 * qtde_elementos) % 4 == 0:
         q3 = (valores[int((3 * qtde_elementos / 4) - 1)] + valores[int((3 * qtde_elementos / 4))]) / 2
-        print(f'Terceiro Quartil = {q3}')
+        print(f'Terceiro Quartil = {q3}\n\n')
     else:
         q3 = valores[int(((3 * qtde_elementos) / 4))]
-        print(f'Terceiro Quartil = {q3}')
+        print(f'Terceiro Quartil = {q3}\n\n')
 #####################################################
 
 
 #             7 - AMPLITUDE
 def amplitude(valores = ()):
+    valores.sort()
+    print(f'Amostra ordenada = {valores}')
     maior = max(valores)
     menor = min(valores)
     amplitude = maior - menor
 
-    print(f'Amplitude = {amplitude}')
+    print(f'Amplitude = {amplitude}\n\n')
 #####################################################
 
 
 #             8 - DESVIO-PADRÃO
 def desvioPadrao (valores = ()):
+    valores.sort()
+    print(f'Amostra ordenada = {valores}')
     media = 0
     tamanho = len(valores) - 1
     indice = 0
@@ -149,13 +154,21 @@ def desvioPadrao (valores = ()):
 
 #             9 - TUDO
 def tudo (valores = ()):
+    print("\n\n----------- MEDIA SIMPLES -----------")
     mediasimples(valores)
+    print("--------- MEDIA PONDERADA -----------")
     mediaponderada(valores)
+    print("--------------- MODA ----------------")
     moda(valores)
+    print("------------- MEDIANA ---------------")
     mediana(valores)
+    print("--------- PRIMEIRO QUARTIL ----------")
     primeiroquartil(valores)
+    print("--------- TERCEIRO QUARTIL ----------")
     terceiroquartil(valores)
+    print("------------ AMPLITUDE --------------")
     amplitude(valores)
+    print("---------- DESVIO PADRÃO ------------")
     desvioPadrao(valores)
 
 
@@ -203,3 +216,5 @@ elif menu == 8:
     desvioPadrao(elementos)
 elif menu == 9:
     tudo(elementos)
+else:
+    print("Opção invalida.")
