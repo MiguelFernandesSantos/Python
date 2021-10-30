@@ -1,294 +1,366 @@
-#---------------------------------------------#
-#                                             #
-#  Nome: Miguel Fernandes Santos              #
-#  Projeto: Conta bancaria.                   #
-#  Data: 25/10/2021                           #
-#                                             #
-#---------------------------------------------#
+//---------------------------------------------#
+//                                             #
+//  Nome: Miguel Fernandes Santos              #
+//  Projeto: Conta bancaria.                   #
+//  Data: 30/10/2021                           #
+//                                             #
+//---------------------------------------------#
 
-# Importa a biblioteca para conseguir pegar a data atual:
-from datetime import date
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
 
+namespace ContaBancaria
+{
+    class Program
+    {
+        static void Main(string[] args)
+        {
 
-# função para retornar o valor do credito que vc possue direito:
-def SeuCredito (salario):
-    
-    # Cria uma lista com 3 valores que se iniciam em 0:
-    dados = [0 for _ in range (3)]
-    
-    # Credito de 50% a mais:
-    dados[0] = ((salario / 100) * 50) + salario
-    
-    # Credito de 75% a mais:
-    dados[1] = ((salario / 100) * 75) + salario
-    
-    # Credito de 100% a mais:
-    dados[2] = ((salario / 100) * 100) + salario
-    
-    return dados
+            // função para adicionar valor a sua conta:
+            double Adicionar(double valor, double saldo)
+            {
 
+                //  adiciona saldo:
+                saldo = saldo + valor;
 
-####################################################################################
+                return saldo;
 
-# função para gerar arquivo txt do extrato na mesma pasta que o arquivo:
-def Extrato (valores = {}, nome = ""):
-    
-    # Pega a data atual:
-    Data = date.today()
-    
-    # Pega a quantidade total de valores no historico: 
-    Tamanho = len(valores["Historico"])
-    
-    # Abre um documento chamado 'extrato.txt':
-    with open('extrato.txt', 'w+') as extrato:
-        # Escreve no documento a data atual:
-        extrato.write("Data atual: " + str(Data) + "\n")
-        # Escreve no documento o nome:
-        extrato.write("Nome: " + str(nome) + "\n")
-        # Escreve no documento o Saldo atual:
-        extrato.write("Saldo atual: " + str(valores["Saldo"]) + "\n")
-        # Escreve no documento o Credito atual:
-        extrato.write("Credito atual: " + str(valores["Credito"]) + "\n")
-        # Escreve no documento o credito a pagar atual:
-        extrato.write("Credito a Pagar: " + str(valores["CreditoPagar"]) + "\n")
-        
-        # Se existir algo no historico
-        if (Tamanho > 0):
-            extrato.write("\n\n---------- HISTORICO ---------\n")
-            # escrever cada uma das informaçoes do historico:
-            for historico in valores["Historico"]:
-                extrato.write(str(historico) + "\n")
+            }
 
+            // função para retornar o valor do credito que vc possue direito:
+            double[] SeuCredito(double Salario)
+            {
 
-        
-####################################################################################
+                // Cria um vetor com 3 valores:
+                double[] dados = new double[3];
 
-# Adiciona no historico de transaçoes:
-def Historico (palavra, valor,):
-    
-    # Pega a data Atual:
-    Data = date.today()
-    # Declara a variavel frase:
-    Frase = ""
-    
-    # A variavel frase recebe a data mais o tipo de movimento mais o valor:
-    Frase = str(Data) + " - Foi " + palavra + " um valor de " + str(valor)
-    
-    return Frase
+                // Credito de 50% a mais:
+                dados[0] = ((Salario / 100) * 50) + Salario;
 
+                // Credito de 75% a mais:
+                dados[1] = ((Salario / 100) * 75) + Salario;
 
+                // Credito de 100% a mais:
+                dados[2] = ((Salario / 100) * 100) + Salario;
 
-####################################################################################
+                return dados;
 
-# função para retirar o dinheiro:
-def Retirar (valor, saldo):
-    
-    # Se o saldo for menor que o valor a retirar:
-    if (saldo < valor):
-        print("Infelizmente o valor que deseja retirar é maior que o seu saldo atual.")
-        return saldo
-        
-    else:
-        saldo = saldo - valor
-    
-    return saldo
+            }
 
+            // função para pedir credito:
+            double[] Credito(double valor, double credito, double saldo, double divida)
+            {
 
+                // Cria uma lista com 3 valores:
+                double[] dados = new double[3];
 
-####################################################################################
+                // Se seu credito for menor que o valor que vc deseja retirar:
+                if (valor > credito)
+                {
 
-# função para adicionar valor a sua conta:
-def Adicionar (valor, saldo):
-    # adiciona saldo:
-    saldo = saldo + valor
-    
-    return saldo
+                    Console.WriteLine("\nInfelizmente seu credito é menor que o necessario!!!");
+                    return dados;
 
+                }
 
+                // Indice 0 é o saldo atual + o credito:
+                dados[0] = valor;
+                // indice 1 é o valor de credito que tem que pagar:
+                dados[1] = divida + valor;
+                // indice 2 é o valor de credito que vc ainda possui:
+                dados[2] = credito - valor;
 
-####################################################################################
+                return dados;
 
-# função para pedir credito:
-def Credito (valor,credito, saldo, divida):
-    
-    # Cria uma lista com 3 valores que se iniciam em 0
-    dados = [0 for _ in range(3)]
-    
-    # Se seu credito for menor que o valor que vc deseja retirar:
-    if (valor > credito):
-        print("\nInfelizmente seu credito é menor que o necessario!!!")
-        return dados
-    
-    # indice 0 é o saldo atual + o credito:
-    dados[0] = valor
-    # indice 1 é o valor de credito que tem que pagar:
-    dados[1] = divida + valor
-    # indice 2 é o valor de credito que vc ainda possui:
-    dados[2] = credito - valor
-    
-    # retorna a lista:
-    return dados
-    
+            }
 
-####################################################################################
+            // função para descobrir se o que foi digitado é um numero:
+            double converter(string value)
+            {
+                // declara a variavel retorno:
+                double retorno = 0;
 
-# IMPORTANTE:
+                // Vai tentar converter o valor passado para float:
+                try
+                {
 
-# função para descobrir se o que foi digitado é um numero:
-def converter (valor):
-    # declara a variavel retorno:
-    retorno = None
-    
-    # Vai tentar converter o valor passado para float:
-    try:
-        retorno = float(valor)
-    
-    # se nao der certo retorna 0:
-    except:
-        print("O valor inserido anteriormente nao é um numero!!!!!")
-        return 0
-    
-    return retorno
+                    retorno = Convert.ToDouble(value);
 
+                }
+                catch // se nao der certo retorna 0:
+                {
 
+                    Console.WriteLine("\nO valor inserido anteriormente não é um numero!!!!!");
+                    return 0;
 
-####################################################################################
+                }
 
-# Dicionario das variaveis da pessoa:
-Pessoa = {
-    
-    "Nome" : "",
-    "Salario" : 0,
-    "Menu" : 0,
-    "opcoes" : []
-    
+                return retorno;
+
+            }
+
+            // função para retirar o dinheiro:
+            double Retirar(double valor, double saldo)
+            {
+
+                // Se o saldo for menor que o valor a retirar:
+                if (saldo < valor)
+                {
+
+                    Console.WriteLine("Infelizmente o valor que deseja retirar é maior que o seu saldo atual.");
+                    return saldo;
+
+                }
+                else
+                {
+
+                    saldo = saldo - valor;
+
+                }
+
+                return saldo;
+            }
+
+            // Adiciona no historico de transaçoes:
+            string Historico(string palavra, double valor)
+            {
+
+                // Pega a data Atual:
+                string data = DateTime.Now.ToString("dd-MM-yyyy");
+                //  Declara a variavel frase:
+                string frase = "";
+
+                // A variavel frase recebe a data mais o tipo de movimento mais o valor:
+                frase = data + " - Foi " + palavra + " um valor de " + Convert.ToString(valor);
+
+                return frase;
+
+            }
+
+            // função para gerar arquivo txt do extrato na mesma pasta que o arquivo:
+            void Extrato(Dictionary<string, double> valores, string Nome, List<string> extrato)
+            {
+
+                // Pega a data atual:
+                string data = DateTime.Now.ToString("dd-MM-yyyy");
+
+                // Pega a quantidade total de valores no historico:
+                int tamanho = valores.Count();
+
+                // Escreve no documento a data atual:
+                Console.WriteLine("\n\nData atual: " + data + "\n");
+                // Escreve no documento o nome:
+                Console.WriteLine("Nome: " + Nome + "\n");
+                // Escreve no documento o Saldo atual:
+                Console.WriteLine("Saldo Atual: " + Convert.ToString(valores["Saldo"]) + "\n");
+                // Escreve no documento o Credito atual:
+                Console.WriteLine("Credito Atual: " + Convert.ToString(valores["Credito"]) + "\n");
+                // Escreve no documento o credito a pagar atual:
+                Console.WriteLine("Credito a pagar: " + Convert.ToString(valores["CreditoPagar"]) + "\n");
+
+                // Se existir algo no historico:
+                if (tamanho > 0)
+                {
+
+                    Console.WriteLine("\n\n---------- HISTORICO ---------\n");
+
+                    // escrever cada uma das informaçoes do historico:
+                    foreach (string item in extrato)
+                    {
+
+                        Console.WriteLine(item + "\n");
+
+                    }
+
+                }
+
+            }
+
+            // Declara uma lista do historico de transações:
+            List<string> historico = new List<string>();
+            // Declara uma variavel para o nome:
+            string nome = "";
+            // Declara um vetor para as 3 opções de credito:
+            double[] opcoes;
+
+            // Dicionario das variaveis da pessoa:
+            Dictionary<string, double> Pessoa = new Dictionary<string, double>()
+            {
+
+                {"Salario", 0 },
+                {"Menu", 0 },
+
+            };
+
+            // Dicionario das variaveis que seram usadas na conta:
+            Dictionary<string, double> Dados = new Dictionary<string, double>()
+            {
+
+                {"Saldo", 5000 },
+                {"Credito", 0 },
+                {"CreditoPagar", 0 },
+                {"AuxiliarRetirar", 0 },
+                {"AuxiliarCOlocar", 0 },
+                {"Menu", 0 }
+
+            };
+
+            Console.WriteLine("---------- Cadastro Pessoal ---------");
+
+            // Faz a leitura do nome:
+            Console.WriteLine("Por favor, insira seu Nome: ");
+            nome = Console.ReadLine();
+
+            // Faz a leitura do salario:
+            while (Pessoa["Salario"] <= 0)
+            {
+
+                // Faz a leitura do seu salario ate ser maior que 0:
+                Console.WriteLine("\n\nPor favor insira seu Salario: ");
+                Pessoa["Salario"] = converter(Console.ReadLine());
+
+            }
+
+            // Chama a função que descobre o seu credito:
+            opcoes = SeuCredito(Pessoa["Salario"]);
+
+            // laço que obriga o usuario a digitar uma das opções:
+            while (Pessoa["Menu"] < 1 || Pessoa["Menu"] > 3)
+            {
+
+                // Mostra as opções de credito:
+                Console.WriteLine("\nBaseado em seu salario você tem direito a creditos de: \n");
+                // Mostra 50% a mais:
+                Console.WriteLine(" 1 - " + Convert.ToString(opcoes[0]));
+                // Mostra 75% a mais:
+                Console.WriteLine(" 2 - " + Convert.ToString(opcoes[1]));
+                // Mostra 100% a mais:
+                Console.WriteLine(" 3 - " + Convert.ToString(opcoes[2]));
+                
+                // Pergunta qual das opções o usuario quer:
+                Console.WriteLine("Qual das opões acima você deseja?");
+                Pessoa["Menu"] = converter(Console.ReadLine());
+            
+                if (Pessoa["Menu"] == 1)
+                {
+
+                    // Escolheu a primeira opção:
+                    Dados["Credito"] = opcoes[0];
+
+                }
+                else if (Pessoa["Menu"] == 2)
+                {
+
+                    // Escolheu a segunda opção:
+                    Dados["Credito"] = opcoes[1];
+
+                }
+                else if (Pessoa["Menu"] == 3)
+                {
+
+                    // Escolheu a terceira opção:
+                    Dados["Credito"] = opcoes[2];
+
+                }
+                else
+                {
+
+                    Console.WriteLine("Opção invalida!!!");
+
+                }
+
+            }
+
+            // --- FIM DO CADASTRO DA PESSOA --- //
+
+            Console.WriteLine("\n\n---------- Bem Vindo ----------");
+
+            while(Dados["Menu"] != 5)
+            {
+                double[] valores;
+
+                // Mostra o menu:
+                Console.WriteLine("\n---------- MENU ----------");
+                Console.WriteLine("\n 1 - Retirar\n 2 - Colocar\n 3 - Credito\n 4 - Extrato\n 5 - Sair\n");
+                Console.WriteLine("\n---------- MENU ----------\n");
+                
+                Dados["Menu"] = 0;
+                // Pergunta qual a escolha do usuario:
+                Console.WriteLine("\nQual a sua escolha");
+                // Faz a leitura da escolha do usuario:
+                Dados["Menu"] = converter(Console.ReadLine());
+                
+                if(Dados["Menu"] == 1)
+                {
+                    // Pergunta o valor que usuario deseja:
+                    Console.WriteLine("\n\nDigite o valor que deseja retirar: ");
+                    // Faz a leitura e converte o valor que o usuario digitar:
+                    Dados["AuxiliarRetirar"] = converter(Console.ReadLine());
+                    // Chama a função retirar:
+                    Dados["Saldo"] = Retirar(Dados["AuxiliarRetirar"], Dados["Saldo"]);
+                    // Adiciona no historico:
+                    historico.Add(Historico("Retirado", Dados["AuxiliarRetirar"]));
+
+                }
+                else if(Dados["Menu"] == 2)
+                {
+
+                    // Pergunta o valor que usuario deseja inserir:
+                    Console.WriteLine("Digite o valor que deseja inserir: ");
+                    // faz a leitura e converte o valor que o usuario digitar:
+                    Dados["AuxiliarColocar"] = converter(Console.ReadLine());
+                    // Chama a função adicionar:
+                    Dados["Saldo"] = Adicionar(Dados["AuxiliarColocar"], Dados["Saldo"]);
+                    // Adiciona no historico:
+                    historico.Add(Historico("Adicionado", Dados["AuxiliarColocar"]));
+
+                }
+                else if(Dados["Menu"] == 3)
+                {
+
+                    // Pergunta o valor que o usuario quer de credito:
+                    Console.WriteLine("Digite o valor que deseja de credito: ");
+                    // Faz a leitura e converte o valor que o usuario digitar:
+                    Dados["AuxiliarColocar"] = converter(Console.ReadLine());
+                    // Chama a função de credito:
+                    valores = Credito(Dados["AuxiliarColocar"], Dados["Credito"], Dados["Saldo"], Dados["CreditoPagar"]);
+                    // O saldo recebe o valor do credito:
+                    Dados["Saldo"] = Dados["Saldo"] + valores[0];
+                    // O credito a pagar recebe o valor:
+                    Dados["CreditoPagar"] = Dados["CreditoPagar"] + valores[1];
+                    // O credito que tem direito - valor:
+                    Dados["Credito"] = Dados["Credito"] - valores[2];
+                    // Adiciona no historico:
+                    historico.Add(Historico("adicionado um credito em", valores[0]));
+
+                }
+                else if(Dados["Menu"] == 4)
+                {
+
+                    // Cria o extrato no console:
+                    Extrato(Dados, nome, historico);
+
+                }
+                else if(Dados["menu"] == 5)
+                {
+
+                    // Sai do programa:
+                    Console.WriteLine("Saindo...");
+
+                }
+                else
+                {
+
+                    // Opção invalida:
+                    Console.WriteLine("Opção invalida!!!!!!");
+
+                }
+
+            }
+
+        }
+    }
 }
-
-# Dicionario das variaveis que seram usadas na conta:
-Dados = {
-    
-    "Saldo" : 5000,
-    "Credito" : 0,
-    "CreditoPagar" : 0,
-    "AuxiliarRetirar" : 0,
-    "AuxiliarColocar" : 0,
-    "Historico" : [],
-    "Menu" : 0,
-    
-}
-
-# ---------- Cadastro da pessoa ---------- :
-
-
-# ---------- Controle da conta ---------- :
-
-print("\n---------- Cadastrar ---------")
-
-# Vai pedir o seu nome:
-Pessoa["Nome"] = input("Digite o seu nome: ")
-
-# Vai forçar vc a digitar um salario maior que 0:
-while Pessoa["Salario"] <= 0:
-    # Pede para digitar o salario, e chama a funçao que retorna o valor em float se possivel_
-    # Caso nao seja um numero retorna o valor 0, entao volta a pedir o salario:
-    Pessoa["Salario"] = converter(input("Digite o seu salario: "))
-
-# Chama a funçao que descobre os creditos que vc tem direito:
-Pessoa["opcoes"] = SeuCredito(Pessoa["Salario"])
-
-# Força o usuario a escolher uma das 3 opçoes:
-while (Pessoa["Menu"] < 1) or (Pessoa["Menu"] > 3) :
-    
-    print("\nBaseado em seu salario você tem direito a creditos de: \n")
-    print(" 1 - " + str(Pessoa["opcoes"][0]))
-    print(" 2 - " + str(Pessoa["opcoes"][1]))
-    print(" 3 - " + str(Pessoa["opcoes"][2]))
-    
-    # pergunta a sua escolha e chama a funçao converter que retorna o valor em float_
-    # Caso nao seja possivel retorna 0 e volta o laço do começo:
-    Pessoa["Menu"] = converter(input("Qual das opções acima você deseja?"))
-    
-    # 50%
-    if Pessoa["Menu"] == 1:
-        Dados["Credito"] = Pessoa["opcoes"][0]
-    
-    # 75%
-    elif(Pessoa["Menu"] == 2):
-        Dados["Credito"] = Pessoa["opcoes"][1]
-    
-    # 100%
-    elif(Pessoa["Menu"] == 3):
-        Dados["Credito"] = Pessoa["opcoes"][2]
-        
-    else:
-        print("Opção invalida!!!!")
-        
-# --------- Fim do Cadastro da pessoa --------- :
-      
-print("\nBem vindo: \n\n")
-
-while (Dados["Menu"] != 5):
-    
-    valores = []
-    
-    # Cria um Menu
-    print("\n--------- MENU ---------")
-    print("\n 1 - Retirar\n 2 - Colocar\n 3 - Credito\n 4 - Extrato\n 5 - Sair\n")
-    print("--------- MENU ---------\n")
-
-    # Pergunta qual a escolha do usuario:
-    Dados["Menu"] = 0
-    Dados["Menu"] = converter(input("Qual a sua escolha?"))
-
-    
-    # Opção numero 1 é retirar:
-    if (Dados["Menu"] == 1):  
-        # Pede para o usuario digitar o valor que deseja retirar:
-        Dados["AuxiliarRetirar"] = input("Digite o valor que deseja retirar: ")
-        # Chama a função que converte o valor:
-        Dados["AuxiliarRetirar"] = converter(Dados["AuxiliarRetirar"])
-        # Chama a função para retirar o valor da conta:
-        Dados["Saldo"] = Retirar(Dados["AuxiliarRetirar"], Dados["Saldo"])
-        # Adiciona no historico:
-        Dados["Historico"].append(Historico("Retirado", Dados["AuxiliarRetirar"]))
-
-        
-    # opção numero 2 é inserir:
-    elif(Dados["Menu"] == 2):
-        # Pede para o usuario digitar o valor que deseja inserir:
-        Dados["AuxiliarColocar"] = input("Digite o valor que deseja inserir: ")
-        # Chama a função que converte o valor:
-        Dados["AuxiliarColocar"] = converter(Dados["AuxiliarColocar"])    
-        # Chama a função para inserir o valor na conta:
-        Dados["Saldo"] = Adicionar(Dados["AuxiliarColocar"], Dados["Saldo"])    
-        # Adiciona no historico:
-        Dados["Historico"].append(Historico("Adicionado", Dados["AuxiliarColocar"]))    
-
-        
-    # opção numero 3 é credito:    
-    elif(Dados["Menu"] == 3):
-        # Pede para o usuario digitar o valor que deseja inserir:
-        Dados["AuxiliarColocar"] = input("Digite o valor que deseja de credito: ")
-        # Chama a função que converte o valor:
-        Dados["AuxiliarColocar"] = converter(Dados["AuxiliarColocar"])
-        # Chama a função que calcula o credito e retorna um vetor:
-        valores = Credito(Dados["AuxiliarColocar"], Dados["Credito"], Dados["Saldo"], Dados["CreditoPagar"])
-        # Adiciona no saldo o valor que foi pedido:
-        Dados["Saldo"] = Dados["Saldo"] + valores[0]
-        # Adiciona no credito a pagar o valor que foi pedido:
-        Dados["CreditoPagar"] = Dados["CreditoPagar"] + valores[1]
-        # Diminui o credito a recuperar:
-        Dados["Credito"] = Dados["Credito"] - valores[2]
-        # Coloca no historico:
-        Dados["Historico"].append(Historico("adicionado um credito em", valores[0]))    
-     
-    
-    elif(Dados["Menu"] == 4):
-        Extrato(Dados, Pessoa["Nome"])
-
-    elif(Dados["Menu"] == 5):
-        print("Saindo...")
-        Dados["Verificador"] = False
-
-    else:
-        print("Opção invalida!!!!")
