@@ -15,20 +15,29 @@ import matplotlib.pyplot as plt
 # Importa a biblioteca matematica:
 import math
 
-
+# função para criar um grafico da movimentação do saldo:
 def Grafico(valores = []):
+    # pega a quantidade de movimentações:
     tamanho = len(valores)
+    # Declara uma variavel para aliementar o eixo:
     x = 1
+    # Cria uma lista para ser o eixo:
     Eixo = []
     
+    # Laço para deixar o eixo com a mesma quantidade de valores que o saldo:
     while (x <= tamanho):
+        # Adiciona no eixo o valor de X:
         Eixo.append(x)
+        # Adiciona +1 no X:
         x = x + 1
     
-    
+    # Cria um Grafico:
     plt.plot(Eixo, valores)
+    # Eixo Y recebe a palavra Saldo:
     plt.ylabel('Saldo')
+    # Eixo X recebe a palavra Quantidade:
     plt.xlabel('Quantidade')
+    # Mostra o grafico:
     plt.show()
 
     
@@ -260,7 +269,7 @@ while (Dados["Menu"] != 6):
     
     # Cria um Menu
     print("\n--------- MENU ---------")
-    print("\n 1 - Retirar\n 2 - Colocar\n 3 - Credito\n 4 - Extrato\n 5 - Grafico\n 6 - Sair\n")
+    print("\n 1 - Retirar\n 2 - Colocar\n 3 - Credito\n 4 - Extrato\n 5 - Movimentação\n 6 - Sair\n")
     print("--------- MENU ---------\n")
 
     # Pergunta qual a escolha do usuario:
