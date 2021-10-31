@@ -9,6 +9,29 @@
 # Importa a biblioteca para conseguir pegar a data atual:
 from datetime import date
 
+# Importa a bibloteca para criar grafico:
+import matplotlib.pyplot as plt
+
+# Importa a biblioteca matematica:
+import math
+
+
+def Grafico(valores = []):
+    tamanho = len(valores)
+    x = 1
+    Eixo = []
+    
+    while (x <= tamanho):
+        Eixo.append(x)
+        x = x + 1
+    
+    
+    plt.plot(Eixo, valores)
+    plt.ylabel('Saldo')
+    plt.xlabel('Quantidade')
+    plt.show()
+
+    
 
 # função para retornar o valor do credito que vc possue direito:
 def SeuCredito (salario):
@@ -167,12 +190,13 @@ Pessoa = {
 # Dicionario das variaveis que seram usadas na conta:
 Dados = {
     
-    "Saldo" : 5000,
+    "Saldo" : 0,
     "Credito" : 0,
     "CreditoPagar" : 0,
     "AuxiliarRetirar" : 0,
     "AuxiliarColocar" : 0,
     "Historico" : [],
+    "HistoricoSaldo" : [],
     "Menu" : 0,
     
 }
@@ -194,6 +218,9 @@ while Pessoa["Salario"] <= 0:
     Pessoa["Salario"] = converter(input("Digite o seu salario: "))
 
 # Chama a funçao que descobre os creditos que vc tem direito:
+Dados["Saldo"] = Pessoa["Salario"]
+Dados["HistoricoSaldo"].append(Dados["Saldo"])
+
 Pessoa["opcoes"] = SeuCredito(Pessoa["Salario"])
 
 # Força o usuario a escolher uma das 3 opçoes:
@@ -227,13 +254,13 @@ while (Pessoa["Menu"] < 1) or (Pessoa["Menu"] > 3) :
       
 print("\nBem vindo: \n\n")
 
-while (Dados["Menu"] != 5):
+while (Dados["Menu"] != 6):
     
     valores = []
     
     # Cria um Menu
     print("\n--------- MENU ---------")
-    print("\n 1 - Retirar\n 2 - Colocar\n 3 - Credito\n 4 - Extrato\n 5 - Sair\n")
+    print("\n 1 - Retirar\n 2 - Colocar\n 3 - Credito\n 4 - Extrato\n 5 - Grafico\n 6 - Sair\n")
     print("--------- MENU ---------\n")
 
     # Pergunta qual a escolha do usuario:
@@ -251,7 +278,8 @@ while (Dados["Menu"] != 5):
         Dados["Saldo"] = Retirar(Dados["AuxiliarRetirar"], Dados["Saldo"])
         # Adiciona no historico:
         Dados["Historico"].append(Historico("Retirado", Dados["AuxiliarRetirar"]))
-
+        # Adiciona o valor atual do saldo:
+        Dados["HistoricoSaldo"].append(Dados["Saldo"])
         
     # opção numero 2 é inserir:
     elif(Dados["Menu"] == 2):
@@ -263,7 +291,8 @@ while (Dados["Menu"] != 5):
         Dados["Saldo"] = Adicionar(Dados["AuxiliarColocar"], Dados["Saldo"])    
         # Adiciona no historico:
         Dados["Historico"].append(Historico("Adicionado", Dados["AuxiliarColocar"]))    
-
+        # Adiciona o valor atual do saldo:
+        Dados["HistoricoSaldo"].append(Dados["Saldo"])        
         
     # opção numero 3 é credito:    
     elif(Dados["Menu"] == 3):
@@ -281,12 +310,16 @@ while (Dados["Menu"] != 5):
         Dados["Credito"] = Dados["Credito"] - valores[2]
         # Coloca no historico:
         Dados["Historico"].append(Historico("adicionado um credito em", valores[0]))    
-     
+        # Adiciona o valor atual do saldo:
+        Dados["HistoricoSaldo"].append(Dados["Saldo"])
     
     elif(Dados["Menu"] == 4):
         Extrato(Dados, Pessoa["Nome"])
-
+        
     elif(Dados["Menu"] == 5):
+        Grafico(Dados["HistoricoSaldo"])
+
+    elif(Dados["Menu"] == 6):
         print("Saindo...")
         Dados["Verificador"] = False
 
