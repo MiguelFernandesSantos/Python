@@ -15,8 +15,10 @@ import matplotlib.pyplot as plt
 # Importa a biblioteca matematica:
 import math
 
+####################################################################################
+
 # função para criar um grafico da movimentação do saldo:
-def Grafico(valores = []):
+def GraficoLinha(valores = []):
     # pega a quantidade de movimentações:
     tamanho = len(valores)
     # Declara uma variavel para aliementar o eixo:
@@ -41,7 +43,23 @@ def Grafico(valores = []):
     plt.show()
 
     
-
+####################################################################################
+    
+# função para criar um grafico de barras:
+def GraficoBarra(valores = {}):
+    # coloca as label em baixo das barras:
+    Tipos = ['Saldo', 'Credito', 'Credito Pagar']
+    # Os valores usados para a altura da barra baseado no seu valor:
+    Dados = [valores["Saldo"],valores["Credito"],valores["CreditoPagar"],]
+    # criando o grafico de barras:
+    plt.bar(Tipos, Dados, color = "black")
+    # Label do Y:
+    plt.ylabel("Valor")
+    # TItulo do grafico:
+    plt.title("Saldos")
+    # mostrar o grafico:
+    plt.show()
+    
 # função para retornar o valor do credito que vc possue direito:
 def SeuCredito (salario):
     
@@ -161,7 +179,64 @@ def Credito (valor,credito, saldo, divida):
     # retorna a lista:
     return dados
     
+####################################################################################
 
+def PagarCredito(Saldo, CreditoPagar):
+    
+    Opcao = 0
+    Pagar = 0
+    
+    # Primeiro observa se existe credito a pagar:
+    if (CreditoPagar <= 0):
+        print("Você nao possui credito a pagar.\n")
+        return 0
+    
+    else: # Se existir um valor a pagar:
+        
+        # Mostra o valor que voce tem a pagar:
+        print("\nO seu credito a pagar é de " + str(CreditoPagar))
+        # Faz a leitura de quanto o usuario quer pagar:
+        Pagar = converter(input("\nQual o valor que deseja pagar?"))
+        
+        # Se o usuario digitou letras ou o numero 0:
+        if(Pagar == 0):
+            print("Infelizmente o valor é invalido ou igual a 0, tenta novamente mais tarde!")
+            return 0
+    
+         # Se o seu saldo é insuficiente para realizar o pagamento:
+        elif(Pagar > Saldo):
+            print("Não possui saldo suficiente para realizar esse pagamento, tente novamente mais tarde!")
+            return 0
+        
+        # Se o usuario deseja pagar mais que o necessario:
+        elif(Pagar > CreditoPagar):
+            
+            # laço para fazer o usuario escolher uma das opções:
+            while(Opcao != 1 or Opcao != 2):
+                # Mostra que o valor que deseja pagar é superior que o valor necessario:
+                print("\n\nO valor que deseja pagar é maior que " + str(CreditoPagar) + ".\n")
+                # Pergunta se deseja realmente pagar:
+                opcao = converter(input("Deseja pagar o valor total?\n 1 - Sim\n 2 - Não"))
+                
+                # Se deseja:
+                if (opcao == 1):
+                    # Pagar recebe o valor total da divida:
+                    Pagar = CreditoPagar  
+                    print("Okay, foi pago o valor total!")
+                    # Retorna o valor total a pagar:
+                    return Pagar
+                    
+                elif(opcao == 2): # Se Nao deseja
+                    print("Okay, nao foi realizado o pagamento do credito!")
+                    return 0
+                
+                else: # Se nao ser nenhuma das 2:
+                    print("Opção invalida!!!\n\n")
+                    
+        else: # Se nao paga normalmente
+            print("Foi pago um valor total de " + str(Pagar))
+            return Pagar
+        
 ####################################################################################
 
 # IMPORTANTE:
@@ -263,13 +338,14 @@ while (Pessoa["Menu"] < 1) or (Pessoa["Menu"] > 3) :
       
 print("\nBem vindo: \n\n")
 
-while (Dados["Menu"] != 6):
+while (Dados["Menu"] != 8):
     
     valores = []
     
     # Cria um Menu
+    # pagar credito &¨& transferencia:
     print("\n--------- MENU ---------")
-    print("\n 1 - Retirar\n 2 - Colocar\n 3 - Credito\n 4 - Extrato\n 5 - Movimentação\n 6 - Sair\n")
+    print("\n 1 - Retirar\n 2 - Colocar\n 3 - Credito\n 4 - Pagar Credito\n 5 - Transferencia\n 6 - Extrato\n 7 - Movimentação\n 8 - Sair\n")
     print("--------- MENU ---------\n")
 
     # Pergunta qual a escolha do usuario:
@@ -279,16 +355,20 @@ while (Dados["Menu"] != 6):
     
     # Opção numero 1 é retirar:
     if (Dados["Menu"] == 1):  
-        # Pede para o usuario digitar o valor que deseja retirar:
+        # Pede para o usuario digitar o valor que deseja transferir:
         Dados["AuxiliarRetirar"] = input("Digite o valor que deseja retirar: ")
         # Chama a função que converte o valor:
         Dados["AuxiliarRetirar"] = converter(Dados["AuxiliarRetirar"])
         # Chama a função para retirar o valor da conta:
-        Dados["Saldo"] = Retirar(Dados["AuxiliarRetirar"], Dados["Saldo"])
-        # Adiciona no historico:
-        Dados["Historico"].append(Historico("Retirado", Dados["AuxiliarRetirar"]))
-        # Adiciona o valor atual do saldo:
-        Dados["HistoricoSaldo"].append(Dados["Saldo"])
+        Dados["AuxiliarRetirar"] = Retirar(Dados["AuxiliarRetirar"], Dados["Saldo"])
+        # Se foi realizado:
+        if(Dados["AuxiliarRetirar"] != Dados["Saldo"]):
+            # Saldo recebe o novo saldo:
+            Dados["Saldo"] = Dados["AuxiliarRetirar"]
+            # Adiciona no historico:
+            Dados["Historico"].append(Historico("retirar", Dados["AuxiliarRetirar"]))
+            # Adiciona o valor atual do saldo:
+            Dados["HistoricoSaldo"].append(Dados["Saldo"])
         
     # opção numero 2 é inserir:
     elif(Dados["Menu"] == 2):
@@ -322,13 +402,51 @@ while (Dados["Menu"] != 6):
         # Adiciona o valor atual do saldo:
         Dados["HistoricoSaldo"].append(Dados["Saldo"])
     
+    # opção numero 4 Pagar Credito:
     elif(Dados["Menu"] == 4):
+        # Chama função pagar credito:
+        Dados["AuxiliarRetirar"] = PagarCredito(Dados["Saldo"], Dados["CreditoPagar"])
+        # diminui o valor do saldo baseado no retorno da função:
+        Dados["Saldo"] = Dados["Saldo"] - Dados["AuxiliarRetirar"]
+        # aumenta o valor do credito baseado no retorno da função:
+        Dados["Credito"] = Dados["Credito"] + Dados["AuxiliarRetirar"]
+        # diminui o valor a pagar de credito baseado no retorno da função:
+        Dados["CreditoPagar"] = Dados["CreditoPagar"] - Dados["AuxiliarRetirar"]
+        # Se o valor retornado ser diferente de 0:
+        if (Dados["AuxiliarRetirar"]) != 0:
+            # Adiciona no historico:
+            Dados["Historico"].append(Historico("pago a divida credito em", Dados["AuxiliarRetirar"]))
+            # Grava o saldo atual no historico:
+            Dados["HistoricoSaldo"].append(Dados["Saldo"])
+        
+    # opção numero 5 Transferencia:    
+    elif(Dados["Menu"] == 5):
+        # Pede para o usuario digitar o valor que deseja transferir:
+        Dados["AuxiliarRetirar"] = input("Digite o valor que deseja transferir: ")
+        # Chama a função que converte o valor:
+        Dados["AuxiliarRetirar"] = converter(Dados["AuxiliarRetirar"])
+        # Chama a função para retirar o valor da conta:
+        Dados["AuxiliarRetirar"] = Retirar(Dados["AuxiliarRetirar"], Dados["Saldo"])
+        # Se foi realizado:
+        if(Dados["AuxiliarRetirar"] != Dados["Saldo"]):
+            # Saldo recebe o novo saldo:
+            Dados["Saldo"] = Dados["AuxiliarRetirar"]
+            # Adiciona no historico:
+            Dados["Historico"].append(Historico("transferido", Dados["AuxiliarRetirar"]))
+            # Adiciona o valor atual do saldo:
+            Dados["HistoricoSaldo"].append(Dados["Saldo"])
+        
+    # opção numero 6 Extrato:
+    elif(Dados["Menu"] == 6):
         Extrato(Dados, Pessoa["Nome"])
         
-    elif(Dados["Menu"] == 5):
-        Grafico(Dados["HistoricoSaldo"])
-
-    elif(Dados["Menu"] == 6):
+    # opção numero 7 Graficos:
+    elif(Dados["Menu"] == 7):
+        GraficoLinha(Dados["HistoricoSaldo"])
+        GraficoBarra(Dados)
+    
+    # opção numero 8 sair:
+    elif(Dados["Menu"] == 8):
         print("Saindo...")
         Dados["Verificador"] = False
 
