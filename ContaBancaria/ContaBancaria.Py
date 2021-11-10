@@ -17,6 +17,135 @@ import math
 
 ####################################################################################
 
+#             1 - MÉDIA ARITMÉTICA SIMPLES
+def mediasimples(valores = []):
+    media = 0
+    qtde_elementos = len(valores)
+                 
+    for item in valores:
+        media += item
+
+    media = media / qtde_elementos
+    return media
+
+####################################################################################
+
+#             2 - MODA
+def moda(valores = []):
+    dic = {item: 0 for item in valores}
+    for item in valores:
+        if item in dic.keys():
+            dic[item] += 1
+    valor_moda = [item for item in dic.values()]
+    resultado_moda = [numero for numero in dic.keys() if dic[numero] == max(valor_moda) and max(valor_moda) > 1]
+
+    if len(resultado_moda) != 0:
+        return resultado_moda
+                 
+    else:
+        return None
+                 
+####################################################################################
+                 
+#             3 - MEDIANA
+def mediana(valores = []):
+    qtde_elementos = len(valores)
+    
+    if qtde_elementos % 2 == 0:
+        med = (valores[int((qtde_elementos / 2) - 1)] + valores[int((qtde_elementos / 2))]) / 2
+    else:
+        med = valores[int((qtde_elementos / 2))]
+
+    return med
+                 
+####################################################################################
+
+#             4 - PRIMEIRO QUARTIL
+def primeiroquartil(valores = []):
+    qtde_elementos = len(valores)
+    
+    if qtde_elementos % 4 == 0:
+        q1 = (valores[int((qtde_elementos / 4) - 1)] + valores[int((qtde_elementos / 4))]) / 2
+    else:
+        q1 = valores[int((qtde_elementos / 4))]
+
+    return q1
+                 
+####################################################################################
+
+#             5 - TERCEIRO QUARTIL
+def terceiroquartil(valores = []):
+    qtde_elementos = len(valores)
+    
+    if (3 * qtde_elementos) % 4 == 0:
+        q3 = (valores[int((3 * qtde_elementos / 4) - 1)] + valores[int((3 * qtde_elementos / 4))]) / 2
+    else:
+        q3 = valores[int(((3 * qtde_elementos) / 4))]
+
+    return q3
+                 
+####################################################################################
+
+#             6 - AMPLITUDE
+def amplitude(valores = []):
+    maior = max(valores)
+    menor = min(valores)
+    amplitude = maior - menor
+
+    return amplitude
+                 
+####################################################################################
+                 
+#             7 - DESVIO-PADRÃO
+def desvioPadrao (valores = []):
+    media = 0
+    tamanho = len(valores) - 1
+    indice = 0
+    valor = 0
+    soma = 0
+    variancias = [None for _ in range(tamanho + 1)]
+    varianciasQuadrada = [None for _ in range(tamanho + 1)]
+    
+    for item in valores:
+        media += item
+
+    media = media / (tamanho + 1)
+
+    for item in valores:
+        valor = item - media
+        variancias[indice] = valor
+        indice += 1
+
+    indice = 0
+
+    for item in variancias:
+        valor =  item * item
+        varianciasQuadrada[indice] = valor
+        indice += 1
+
+    soma = sum(varianciasQuadrada)
+    soma = soma / tamanho  
+    soma = math.sqrt(soma)
+                 
+    return soma
+
+####################################################################################
+
+#             9 - TUDO
+def tudo (valores = []):
+    dados = [None for _ in range(7)]
+    dados[0] = mediasimples(valores)
+    dados[1] = moda(valores)
+    dados[2] = mediana(valores)
+    dados[3] = primeiroquartil(valores)
+    dados[4] = terceiroquartil(valores)
+    dados[5] = amplitude(valores)
+    dados[6] = desvioPadrao(valores)
+
+    return dados
+
+####################################################################################
+
 # função para criar um grafico da movimentação do saldo:
 def GraficoLinha(valores = []):
     # pega a quantidade de movimentações:
@@ -59,7 +188,9 @@ def GraficoBarra(valores = {}):
     plt.title("Saldos")
     # mostrar o grafico:
     plt.show()
-    
+
+####################################################################################
+
 # função para retornar o valor do credito que vc possue direito:
 def SeuCredito (salario):
     
@@ -275,12 +406,14 @@ Pessoa = {
 Dados = {
     
     "Saldo" : 0,
+    "SaldoProvisorio" : 0,
     "Credito" : 0,
     "CreditoPagar" : 0,
     "AuxiliarRetirar" : 0,
     "AuxiliarColocar" : 0,
     "Historico" : [],
     "HistoricoSaldo" : [],
+    "Estatistica" : [],
     "Menu" : 0,
     
 }
@@ -338,14 +471,14 @@ while (Pessoa["Menu"] < 1) or (Pessoa["Menu"] > 3) :
       
 print("\nBem vindo: \n\n")
 
-while (Dados["Menu"] != 8):
+while (Dados["Menu"] != 9):
     
     valores = []
     
     # Cria um Menu
     # pagar credito &¨& transferencia:
     print("\n--------- MENU ---------")
-    print("\n 1 - Retirar\n 2 - Colocar\n 3 - Credito\n 4 - Pagar Credito\n 5 - Transferencia\n 6 - Extrato\n 7 - Movimentação\n 8 - Sair\n")
+    print("\n 1 - Retirar\n 2 - Colocar\n 3 - Credito\n 4 - Pagar Credito\n 5 - Transferencia\n 6 - Extrato\n 7 - Movimentação\n 8 - Estatistica\n 9 - Sair\n")
     print("--------- MENU ---------\n")
 
     # Pergunta qual a escolha do usuario:
@@ -360,13 +493,13 @@ while (Dados["Menu"] != 8):
         # Chama a função que converte o valor:
         Dados["AuxiliarRetirar"] = converter(Dados["AuxiliarRetirar"])
         # Chama a função para retirar o valor da conta:
-        Dados["AuxiliarRetirar"] = Retirar(Dados["AuxiliarRetirar"], Dados["Saldo"])
+        Dados["SaldoProvisorio"] = Retirar(Dados["AuxiliarRetirar"], Dados["Saldo"])
         # Se foi realizado:
-        if(Dados["AuxiliarRetirar"] != Dados["Saldo"]):
+        if(Dados["SaldoProvisorio"] != Dados["Saldo"]):
             # Saldo recebe o novo saldo:
-            Dados["Saldo"] = Dados["AuxiliarRetirar"]
+            Dados["Saldo"] = Dados["SaldoProvisorio"]
             # Adiciona no historico:
-            Dados["Historico"].append(Historico("retirar", Dados["AuxiliarRetirar"]))
+            Dados["Historico"].append(Historico("retirar",  Dados["AuxiliarRetirar"]))
             # Adiciona o valor atual do saldo:
             Dados["HistoricoSaldo"].append(Dados["Saldo"])
         
@@ -426,13 +559,13 @@ while (Dados["Menu"] != 8):
         # Chama a função que converte o valor:
         Dados["AuxiliarRetirar"] = converter(Dados["AuxiliarRetirar"])
         # Chama a função para retirar o valor da conta:
-        Dados["AuxiliarRetirar"] = Retirar(Dados["AuxiliarRetirar"], Dados["Saldo"])
+        Dados["SaldoProvisorio"] = Retirar(Dados["AuxiliarRetirar"], Dados["Saldo"])
         # Se foi realizado:
-        if(Dados["AuxiliarRetirar"] != Dados["Saldo"]):
+        if(Dados["SaldoProvisorio"] != Dados["Saldo"]):
             # Saldo recebe o novo saldo:
-            Dados["Saldo"] = Dados["AuxiliarRetirar"]
+            Dados["Saldo"] = Dados["SaldoProvisorio"]
             # Adiciona no historico:
-            Dados["Historico"].append(Historico("transferido", Dados["AuxiliarRetirar"]))
+            Dados["Historico"].append(Historico("transferido",(Dados["Saldo"] - Dados["AuxiliarRetirar"])))
             # Adiciona o valor atual do saldo:
             Dados["HistoricoSaldo"].append(Dados["Saldo"])
         
@@ -444,11 +577,17 @@ while (Dados["Menu"] != 8):
     elif(Dados["Menu"] == 7):
         GraficoLinha(Dados["HistoricoSaldo"])
         GraficoBarra(Dados)
-    
-    # opção numero 8 sair:
+
     elif(Dados["Menu"] == 8):
+        Dados["Estatistico"] = tudo(Dados["HistoricoSaldo"])
+        
+        for item in Dados["Estatistico"]:
+            print(item)
+        
+    # opção numero 9 sair:
+    elif(Dados["Menu"] == 9):
         print("Saindo...")
         Dados["Verificador"] = False
-
+        
     else:
         print("Opção invalida!!!!")
