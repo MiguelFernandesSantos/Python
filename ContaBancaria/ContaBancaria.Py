@@ -20,25 +20,34 @@ import math
 #             1 - MÉDIA ARITMÉTICA SIMPLES
 def mediasimples(valores = []):
     media = 0
-    qtde_elementos = len(valores)
-                 
-    for item in valores:
+    # qtde_elementos recebe o valor referente a quantidade de elementos presentes na lista de valores.
+    qtde_elementos = len(valores) 
+    
+     # para cada elemento nessa lista de valores, incrementa-se na variável média.
+    for item in valores: 
         media += item
-
-    media = media / qtde_elementos
+        
+    # Calcula-se então o valor da média dividindo o valor da variavel media pela quantidade de elementos.
+    media = media / qtde_elementos  
     return media
 
 ####################################################################################
 
 #             2 - MODA
 def moda(valores = []):
+    # Cria-se um dicionário onde cada elemento na lista de valores é uma chave com valor inicial 0.
     dic = {item: 0 for item in valores}
-    for item in valores:
+    # É feita uma varredura na lista de valores e caso uma chave seja encontrada, incrementa-se 1 em seu valor.
+    for item in valores: 
         if item in dic.keys():
             dic[item] += 1
+            
+    # Cria-se uma lista com as reincidências dos valores.
     valor_moda = [item for item in dic.values()]
-    resultado_moda = [numero for numero in dic.keys() if dic[numero] == max(valor_moda) and max(valor_moda) > 1]
-
+    
+    # Capturam-se as chaves que possuem os valores iguais ao valor mais alto de valor_moda.
+    resultado_moda = [numero for numero in dic.keys() if dic[numero] == max(valor_moda) and max(valor_moda) > 1] 
+    
     if len(resultado_moda) != 0:
         return resultado_moda
                  
@@ -49,38 +58,52 @@ def moda(valores = []):
                  
 #             3 - MEDIANA
 def mediana(valores = []):
+    # qtde_elementos recebe o valor referente a quantidade de elementos presentes na lista de valores.
     qtde_elementos = len(valores)
     
-    if qtde_elementos % 2 == 0:
-        med = (valores[int((qtde_elementos / 2) - 1)] + valores[int((qtde_elementos / 2))]) / 2
+    # Verifica se a divisão por 2 é exata.
+    if qtde_elementos % 2 == 0: 
+        # Aplicação da formula n / 2; (Como nesse caso a divisão foi exata, soma-se ao valor seguinte ao resultado e divide-se por 2).
+        med = (valores[int((qtde_elementos / 2) - 1)] + valores[int((qtde_elementos / 2))]) / 2 
+    
     else:
-        med = valores[int((qtde_elementos / 2))]
-
+        # Também aplicação da fórmula n / 2; (Nesse caso não trata-se de uma divisão exata, portanto utiliza-se somente a parte inteira através do cast).
+        med = valores[int((qtde_elementos / 2))] 
+        
     return med
                  
 ####################################################################################
 
 #             4 - PRIMEIRO QUARTIL
 def primeiroquartil(valores = []):
-    qtde_elementos = len(valores)
+    # qtde_elementos recebe o valor referente a quantidade de elementos presentes na lista de valores.
+    qtde_elementos = len(valores) 
     
-    if qtde_elementos % 4 == 0:
-        q1 = (valores[int((qtde_elementos / 4) - 1)] + valores[int((qtde_elementos / 4))]) / 2
+    # Verifica se a divisão por 4 é exata.
+    if qtde_elementos % 4 == 0: 
+        # Aplicação da formula n / 4; (Como nesse caso a divisão foi exata, soma-se ao valor seguinte ao resultado e divide-se por 2).
+        q1 = (valores[int((qtde_elementos / 4) - 1)] + valores[int((qtde_elementos / 4))]) / 2 
+        
     else:
+        # Também aplicação da fórmula n / 4; (Nesse caso não trata-se de uma divisão exata, portanto utiliza-se somente a parte inteira através do cast).
         q1 = valores[int((qtde_elementos / 4))]
-
+        
     return q1
                  
 ####################################################################################
 
 #             5 - TERCEIRO QUARTIL
 def terceiroquartil(valores = []):
-    qtde_elementos = len(valores)
+    # qtde_elementos recebe o valor referente a quantidade de elementos presentes na lista de valores.
+    qtde_elementos = len(valores) 
     
+     # Verifica se a divisão por 4 é exata.
     if (3 * qtde_elementos) % 4 == 0:
-        q3 = (valores[int((3 * qtde_elementos / 4) - 1)] + valores[int((3 * qtde_elementos / 4))]) / 2
+        # Aplicação da formula 3n / 4; (Como nesse caso a divisão foi exata, soma-se ao valor seguinte ao resultado e divide-se por 2).
+        q3 = (valores[int((3 * qtde_elementos / 4) - 1)] + valores[int((3 * qtde_elementos / 4))]) / 2 
     else:
-        q3 = valores[int(((3 * qtde_elementos) / 4))]
+        # Também aplicação da fórmula 3n / 4; (Nesse caso não trata-se de uma divisão exata, portanto utiliza-se somente a parte inteira através do cast).
+        q3 = valores[int(((3 * qtde_elementos) / 4))] 
 
     return q3
                  
@@ -88,8 +111,11 @@ def terceiroquartil(valores = []):
 
 #             6 - AMPLITUDE
 def amplitude(valores = []):
-    maior = max(valores)
+    # Recebe o MAIOR valor da lista de valores.
+    maior = max(valores) 
+    # Recebe o MENOR valor da lista de valores.
     menor = min(valores)
+    # Recebe a diferença entre o MAIOR valor e o MENOR valor.
     amplitude = maior - menor
 
     return amplitude
