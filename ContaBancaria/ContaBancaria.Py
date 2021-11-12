@@ -24,7 +24,7 @@ import sqlite3
 ####################################################################################
 def NovoBanco():
     # Se existir um banco de dados com esse nome ele deleta:
-    os.remove('Estatistica.db') if os.path.exists('Estatistica.db') else None
+    # os.remove('Estatistica.db') if os.path.exists('Estatistica.db') else None
     
     # Ele faz a conexao com o banco de dados e caso nao exista ele cria o banco:
     conexao = sqlite3.connect('Estatistica.db')
@@ -34,23 +34,34 @@ def NovoBanco():
     
     # Cria uma query sql para criar a tabela:
     QueryTb = 'Create table if not exists Tb_Estatistica'\
-              '(Tb_Estatistica_Id integer not null primary key auto_increment,'\
-              'Tb_Estatistica_Media decimal(10, 2),'\
-              'Tb_Estatistica_Moda decimal(10, 2),'\
-              'Tb_Estatistica_Mediana decimal(10, 2),'\
-              'Tb_Estatistica_PrimeiroQuartil decimal(10, 2),'\
-              'Tb_Estatistica_TerceiroQuartil decimal(10, 2),'\
-              'Tb_Estatistica_Amplitude decimal(10, 2),'\
-              'Tb_Estatistica_DesvioPadrao decimal(10,2))'
+              '(Tb_Estatistica_Id integer not null primary key autoincrement,'\
+              'Tb_Estatistica_Media decimal(10, 5),'\
+              'Tb_Estatistica_Moda decimal(10, 5),'\
+              'Tb_Estatistica_Mediana decimal(10, 5),'\
+              'Tb_Estatistica_PrimeiroQuartil decimal(10, 5),'\
+              'Tb_Estatistica_TerceiroQuartil decimal(10, 5),'\
+              'Tb_Estatistica_Amplitude decimal(10, 5),'\
+              'Tb_Estatistica_DesvioPadrao decimal(10,5))'
     
     # execulta a query de criação da tabela:
     cursor.execute(QueryTb)
     
 ####################################################################################
-def BancoInserir (Valores):
+def BancoInserir (Valores = []):
+    # Ele faz a conexao com o banco de dados e caso nao exista ele cria o banco:
+    conexao = sqlite3.connect('Estatistica.db')
+
+    # Criando um cursor para percorrer o banco de dados:
+    cursor = conexao.cursor()
+
     # Query para inserir valores no banco de dados:
-    QueryTbInserir = 'insert into Tb_Estatistica values'\
-                     '(?,?,?,?,?,?,?)'
+    QueryTbInserir = 'insert into Tb_Estatistica'\
+                     '(Tb_Estatistica_Media, Tb_Estatistica_Moda,'\
+                     'Tb_Estatistica_Mediana, Tb_Estatistica_PrimeiroQuartil,'\
+                     'Tb_Estatistica_TerceiroQuartil, Tb_Estatistica_Amplitude,'\
+                     'Tb_Estatistica_DesvioPadrao)'\
+                     'values (?,?,?,?,?,?,?)'
+    
     # Execulta a query trocando os "?" pelos valores do array:                 
     cursor.execute(QueryTbInserir, Valores)
     
@@ -59,16 +70,21 @@ def BancoInserir (Valores):
 
 ####################################################################################
 def ExibirBanco():
+    # Ele faz a conexao com o banco de dados e caso nao exista ele cria o banco:
+    conexao = sqlite3.connect('Estatistica.db')
+
+    # Criando um cursor para percorrer o banco de dados:
+    cursor = conexao.cursor()
     
-
-
-####################################################################################
-
-
-
-####################################################################################
-
-
+    # Query para selecionar:
+    QueryTbSelecionar = "select * from Tb_Estatistica"
+    
+    cursor.execute(QueryTbSelecionar)
+    
+    valores = cursor.fetchall()
+    
+    for linha in valores:
+        print("ID: %d   |   Media: %d   |   Moda: %d   |   Mediana: %d   |   PriQuar: %d   |   TerQuar: %d   |   Amplitude: %d   |   DesPad: %d", linha)
 
 ####################################################################################
 
@@ -223,8 +239,8 @@ def tudo (valores = []):
     dados[5] = amplitude(valores)
     dados[6] = desvioPadrao(valores)
 
-    return dados
-
+    BancoInserir(dados)
+    
 ####################################################################################
 
 # função para criar um grafico da movimentação do saldo:
@@ -552,14 +568,16 @@ while (Pessoa["Menu"] < 1) or (Pessoa["Menu"] > 3) :
       
 print("\nBem vindo: \n\n")
 
-while (Dados["Menu"] != 9):
+NovoBanco()
+
+while (Dados["Menu"] != 10):
     
     valores = []
     
     # Cria um Menu
     # pagar credito &¨& transferencia:
     print("\n--------- MENU ---------")
-    print("\n 1 - Retirar\n 2 - Colocar\n 3 - Credito\n 4 - Pagar Credito\n 5 - Transferencia\n 6 - Extrato\n 7 - Movimentação\n 8 - Estatistica\n 9 - Sair\n")
+    print("\n 1 - Retirar\n 2 - Colocar\n 3 - Credito\n 4 - Pagar Credito\n 5 - Transferencia\n 6 - Extrato\n 7 - Movimentação\n 8 - Estatistica\n 9 - Exibir Banco\n 10 - Sair\n")
     print("--------- MENU ---------\n")
 
     # Pergunta qual a escolha do usuario:
@@ -658,15 +676,16 @@ while (Dados["Menu"] != 9):
     elif(Dados["Menu"] == 7):
         GraficoLinha(Dados["HistoricoSaldo"])
         GraficoBarra(Dados)
-
+    
+    # opção numero 8 Estatistica:
     elif(Dados["Menu"] == 8):
-        Dados["Estatistico"] = tudo(Dados["HistoricoSaldo"])
+        tudo(Dados["HistoricoSaldo"])
         
-        for item in Dados["Estatistico"]:
-            print(item)
-        
-    # opção numero 9 sair:
     elif(Dados["Menu"] == 9):
+        ExibirBanco()
+    
+    # opção numero 10 sair:
+    elif(Dados["Menu"] == 10):
         print("Saindo...")
         Dados["Verificador"] = False
         
