@@ -15,6 +15,61 @@ import matplotlib.pyplot as plt
 # Importa a biblioteca matematica:
 import math
 
+# Importa a biblioteca Os:
+import os
+
+# Importa a biblioteca Sqlite:
+import sqlite3
+
+####################################################################################
+def NovoBanco():
+    # Se existir um banco de dados com esse nome ele deleta:
+    os.remove('Estatistica.db') if os.path.exists('Estatistica.db') else None
+    
+    # Ele faz a conexao com o banco de dados e caso nao exista ele cria o banco:
+    conexao = sqlite3.connect('Estatistica.db')
+    
+    # Criando um cursor para percorrer o banco de dados:
+    cursor = conexao.cursor()
+    
+    # Cria uma query sql para criar a tabela:
+    QueryTb = 'Create table if not exists Tb_Estatistica'\
+              '(Tb_Estatistica_Id integer not null primary key auto_increment,'\
+              'Tb_Estatistica_Media decimal(10, 2),'\
+              'Tb_Estatistica_Moda decimal(10, 2),'\
+              'Tb_Estatistica_Mediana decimal(10, 2),'\
+              'Tb_Estatistica_PrimeiroQuartil decimal(10, 2),'\
+              'Tb_Estatistica_TerceiroQuartil decimal(10, 2),'\
+              'Tb_Estatistica_Amplitude decimal(10, 2),'\
+              'Tb_Estatistica_DesvioPadrao decimal(10,2))'
+    
+    # execulta a query de criação da tabela:
+    cursor.execute(QueryTb)
+    
+####################################################################################
+def BancoInserir (Valores):
+    # Query para inserir valores no banco de dados:
+    QueryTbInserir = 'insert into Tb_Estatistica values'\
+                     '(?,?,?,?,?,?,?)'
+    # Execulta a query trocando os "?" pelos valores do array:                 
+    cursor.execute(QueryTbInserir, Valores)
+    
+    # Salva a mudança no banco:
+    conexao.commit
+
+####################################################################################
+def ExibirBanco():
+    
+
+
+####################################################################################
+
+
+
+####################################################################################
+
+
+
 ####################################################################################
 
 #             1 - MÉDIA ARITMÉTICA SIMPLES
