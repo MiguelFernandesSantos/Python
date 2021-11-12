@@ -21,17 +21,12 @@ import os
 # Importa a biblioteca Sqlite:
 import sqlite3
 
+# Importa o pandas:
+import pandas as pd
+
+
 ####################################################################################
-def NovoBanco():
-    # Se existir um banco de dados com esse nome ele deleta:
-    # os.remove('Estatistica.db') if os.path.exists('Estatistica.db') else None
-    
-    # Ele faz a conexao com o banco de dados e caso nao exista ele cria o banco:
-    conexao = sqlite3.connect('Estatistica.db')
-    
-    # Criando um cursor para percorrer o banco de dados:
-    cursor = conexao.cursor()
-    
+def NovaTabela():
     # Cria uma query sql para criar a tabela:
     QueryTb = 'Create table if not exists Tb_Estatistica'\
               '(Tb_Estatistica_Id integer not null primary key autoincrement,'\
@@ -46,14 +41,9 @@ def NovoBanco():
     # execulta a query de criação da tabela:
     cursor.execute(QueryTb)
     
+    
 ####################################################################################
 def BancoInserir (Valores = []):
-    # Ele faz a conexao com o banco de dados e caso nao exista ele cria o banco:
-    conexao = sqlite3.connect('Estatistica.db')
-
-    # Criando um cursor para percorrer o banco de dados:
-    cursor = conexao.cursor()
-
     # Query para inserir valores no banco de dados:
     QueryTbInserir = 'insert into Tb_Estatistica'\
                      '(Tb_Estatistica_Media, Tb_Estatistica_Moda,'\
@@ -70,22 +60,55 @@ def BancoInserir (Valores = []):
 
 ####################################################################################
 def ExibirBanco():
-    # Ele faz a conexao com o banco de dados e caso nao exista ele cria o banco:
-    conexao = sqlite3.connect('Estatistica.db')
-
-    # Criando um cursor para percorrer o banco de dados:
-    cursor = conexao.cursor()
     
-    # Query para selecionar:
+    # Cria uma serie de lista para receber cada valor do banco:
+    listaMedia = []
+    listaModa = []
+    listaMediana = []
+    listaPrimeiroQuartil = []
+    listaTerceiroQuartil = []
+    listaAmplitude = []
+    listaDesviopadrao = []
+    
+    # Query para selecionar todos os conteudos do banco:
     QueryTbSelecionar = "select * from Tb_Estatistica"
     
+    # execulta a query:
     cursor.execute(QueryTbSelecionar)
     
+    # Um variavel receber o que foi retornado da query:
     valores = cursor.fetchall()
     
+    # faz um laço que percorre cada valor retornado:
     for linha in valores:
-        print("ID: %d   |   Media: %d   |   Moda: %d   |   Mediana: %d   |   PriQuar: %d   |   TerQuar: %d   |   Amplitude: %d   |   DesPad: %d", linha)
-
+        # Atribui para as listas os valores respectivos:
+        listaMedia.append(linha[1])
+        listaModa.append(linha[2])
+        listaMediana.append(linha[3])
+        listaPrimeiroQuartil.append(linha[4])
+        listaTerceiroQuartil.append(linha[5])
+        listaAmplitude.append(linha[6])
+        listaDesviopadrao.append(linha[7])
+    
+    # Cria um dicionario para fazer um DataFrame pandas:
+    Banco = {
+        
+        'Media' : listaMedia,
+        'Moda' : listaModa,
+        'Mediana' : listaMediana,
+        'PriQuartil' : listaPrimeiroQuartil,
+        'TercQuartil' : listaTerceiroQuartil,
+        'Amplitude' : listaAmplitude,
+        'DesvPadrao' : listaDesviopadrao
+        
+    }
+    
+    # Cria um DataFrame:
+    banco_df = pd.DataFrame(Banco)
+    
+    # Mostra o DataFrame:
+    display(banco_df)
+    
 ####################################################################################
 
 #             1 - MÉDIA ARITMÉTICA SIMPLES
@@ -568,7 +591,13 @@ while (Pessoa["Menu"] < 1) or (Pessoa["Menu"] > 3) :
       
 print("\nBem vindo: \n\n")
 
-NovoBanco()
+# Ele faz a conexao com o banco de dados e caso nao exista ele cria o banco:
+conexao = sqlite3.connect('Estatistica.db')
+
+# Criando um cursor para percorrer o banco de dados:
+cursor = conexao.cursor()
+    
+NovaTabela()
 
 while (Dados["Menu"] != 10):
     
@@ -679,8 +708,18 @@ while (Dados["Menu"] != 10):
     
     # opção numero 8 Estatistica:
     elif(Dados["Menu"] == 8):
-        tudo(Dados["HistoricoSaldo"])
-        
+        # Se o tamanho da lista ser maior que 1:
+        if(len(Dados["HistoricoSaldo"]) > 1):
+            # Chama a função que calcula todas as analises estatistica:
+            tudo(Dados["HistoricoSaldo"])
+            # Mostra para o usuario que foi realizado com sucesso.
+            print("Foi realizado a analise estatistica, caso deseje ver utilize a opção numero 9 do menu!")
+            
+        else: # Se o tamanho ser menor ou igual a 1:
+            # Mostra para o usuario que nao teve movimentaçoes na conta:
+            print("Não é possivel realizar pois nao ocorreu movimentação na sua conta!\n\n")
+    
+    # opção numero 9 exibe o banco em um dataframe pandas:
     elif(Dados["Menu"] == 9):
         ExibirBanco()
     
