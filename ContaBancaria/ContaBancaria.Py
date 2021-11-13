@@ -56,7 +56,7 @@ def BancoInserir (Valores = []):
     cursor.execute(QueryTbInserir, Valores)
     
     # Salva a mudança no banco:
-    conexao.commit
+    conexao.commit()
 
 ####################################################################################
 def ExibirBanco():
@@ -726,7 +726,7 @@ while (Dados["Menu"] != 10):
     # opção numero 10 sair:
     elif(Dados["Menu"] == 10):
         print("Saindo...")
-        Dados["Verificador"] = False
+        conexao.close()
         
     else:
         print("Opção invalida!!!!")
