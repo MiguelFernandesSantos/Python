@@ -37,10 +37,18 @@ def NovaTabela():
               'Tb_Estatistica_TerceiroQuartil decimal(10, 5),'\
               'Tb_Estatistica_Amplitude decimal(10, 5),'\
               'Tb_Estatistica_DesvioPadrao decimal(10,5))'
-    
+
+    QueryDeletar = 'DELETE FROM Tb_Estatistica'
+
     # execulta a query de criação da tabela:
     cursor.execute(QueryTb)
+
+    # Execulta a query para limpar os dados da tabela:
+    cursor.execute(QueryDeletar)
     
+    # O comando anterior foi utilizado para que de forma didatica o banco sempre comece
+    # sem nenhum registro das execulsoes anteriores, entretando no cotidiano é algo 
+    # que normalmente nao deve ser feito
     
 ####################################################################################
 def BancoInserir (Valores = []):
@@ -51,10 +59,10 @@ def BancoInserir (Valores = []):
                      'Tb_Estatistica_TerceiroQuartil, Tb_Estatistica_Amplitude,'\
                      'Tb_Estatistica_DesvioPadrao)'\
                      'values (?,?,?,?,?,?,?)'
-    
+        
     # Execulta a query trocando os "?" pelos valores do array:                 
     cursor.execute(QueryTbInserir, Valores)
-    
+        
     # Salva a mudança no banco:
     conexao.commit()
 
